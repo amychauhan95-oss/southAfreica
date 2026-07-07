@@ -8,9 +8,9 @@ const PORT = process.env.PORT || 3000;
 app.use(compression());
 app.use(express.static('public'));
 
-// ── DYNAMIC DOMAIN CONFIGURATION ──────────────────────────────────────────────
-// Get the base URL from environment or use default
-const BASE_URL = process.env.BASE_URL || 'https://sajobs.co.za';
+// ─── DYNAMIC DOMAIN CONFIGURATION ──────────────────────────────────────────────
+// Get the base URL from environment or use the actual domain
+const BASE_URL = process.env.BASE_URL || 'https://wordly-ramp-production.up.railway.app';
 const SITE_NAME = 'SANOVA';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
