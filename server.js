@@ -8,6 +8,11 @@ const PORT = process.env.PORT || 3000;
 app.use(compression());
 app.use(express.static('public'));
 
+// ── DYNAMIC DOMAIN CONFIGURATION ──────────────────────────────────────────────
+// Get the base URL from environment or use default
+const BASE_URL = process.env.BASE_URL || 'https://sajobs.co.za';
+const SITE_NAME = 'SANOVA';
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const JOBS_PER_PAGE = 20;
 
@@ -114,7 +119,7 @@ footer a{color:#f7b731}
 </head>
 <body>
 <nav>
-  <a class="brand" href="/"><span>SA</span>Jobs<span>.co.za</span></a>
+  <a class="brand" href="/"><span>SA</span>NOVA<span>.co.za</span></a>
   <div class="nav-links">
     <a href="/">Home</a>
     <a href="/jobs">Browse Jobs</a>
@@ -124,7 +129,7 @@ footer a{color:#f7b731}
 </nav>
 ${bodyContent}
 <footer>
-  &copy; 2025 SAJobs.co.za — <strong>100,000 Jobs</strong> across South Africa |
+  &copy; 2025 SANOVA.co.za — <strong>100,000 Jobs</strong> across South Africa |
   <a href="/jobs">Browse All</a> · <a href="/jobs?type=remote">Remote Jobs</a> · <a href="/sitemap">Sitemap</a>
 </footer>
 <script>
@@ -170,12 +175,12 @@ app.get('/', (req, res) => {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "SAJobs.co.za",
-    "url": "https://sajobs.co.za",
+    "name": "SANOVA.co.za",
+    "url": BASE_URL,
     "description": "South Africa's largest job portal with 100,000 job listings — remote and on-site across all provinces",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://sajobs.co.za/jobs?q={search_term_string}",
+      "target": `${BASE_URL}/jobs?q={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
   };
@@ -215,7 +220,7 @@ app.get('/', (req, res) => {
 </div>`;
 
   res.send(renderHTML({
-    title: 'SAJobs.co.za — 100,000 Jobs in South Africa | Remote & On-site',
+    title: 'SANOVA.co.za — 100,000 Jobs in South Africa | Remote & On-site',
     meta: 'Find your next job in South Africa. 100,000 verified listings — 50,000 remote and 50,000 on-site jobs across all 9 provinces.',
     bodyContent: body,
     schema: websiteSchema
@@ -300,7 +305,7 @@ app.get('/jobs', (req, res) => {
 </div>`;
 
   res.send(renderHTML({
-    title: `South Africa Jobs — Page ${page} of ${totalPages.toLocaleString()} | SAJobs.co.za`,
+    title: `South Africa Jobs — Page ${page} of ${totalPages.toLocaleString()} | SANOVA.co.za`,
     meta: `Browse ${TOTAL_JOBS.toLocaleString()} jobs in South Africa. Page ${page}. Remote and on-site positions across all industries.`,
     bodyContent: body,
     schema: null
@@ -312,7 +317,7 @@ app.get('/jobs/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (!id || id < 1 || id > TOTAL_JOBS) {
     return res.status(404).send(renderHTML({
-      title: 'Job Not Found | SAJobs.co.za',
+      title: 'Job Not Found | SANOVA.co.za',
       meta: 'This job listing was not found.',
       bodyContent: `<div class="container" style="text-align:center;padding:4rem 1.5rem"><h1>404 — Job Not Found</h1><p style="margin:1rem 0 2rem">This job may have been filled or removed.</p><a href="/jobs" style="color:#006b44">← Browse All Jobs</a></div>`,
       schema: null
@@ -384,8 +389,8 @@ app.get('/jobs/:id', (req, res) => {
 </div>`;
 
   res.send(renderHTML({
-    title: `${job.title} at ${job.company} — ${job.location} | SAJobs.co.za`,
-    meta: `${job.title} job at ${job.company}. ${job.isRemote ? 'Remote' : job.location}. ${job.salary}. Apply now on SAJobs.co.za.`,
+    title: `${job.title} at ${job.company} — ${job.location} | SANOVA.co.za`,
+    meta: `${job.title} job at ${job.company}. ${job.isRemote ? 'Remote' : job.location}. ${job.salary}. Apply now on SANOVA.co.za.`,
     bodyContent: body,
     schema
   }));
@@ -397,7 +402,7 @@ app.get('/sitemap.xml', (req, res) => {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
   for (let i = 1; i <= totalSitemaps; i++) {
-    xml += `\n<sitemap><loc>https://sajobs.co.za/sitemap-${i}.xml</loc></sitemap>`;
+    xml += `\n<sitemap><loc>${BASE_URL}/sitemap-${i}.xml</loc></sitemap>`;
   }
   xml += `\n</sitemapindex>`;
   res.type('application/xml').send(xml);
@@ -411,7 +416,7 @@ app.get('/sitemap-:num.xml', (req, res) => {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
   for (let i = start; i <= end; i++) {
-    xml += `\n<url><loc>https://sajobs.co.za/jobs/${i}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`;
+    xml += `\n<url><loc>${BASE_URL}/jobs/${i}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`;
   }
   xml += `\n</urlset>`;
   res.type('application/xml').send(xml);
@@ -421,7 +426,7 @@ app.get('/sitemap-:num.xml', (req, res) => {
 app.get('/sitemap', (req, res) => {
   const body = `
 <div class="container">
-  <h1 style="margin-bottom:1rem">Sitemap — SAJobs.co.za</h1>
+  <h1 style="margin-bottom:1rem">Sitemap — SANOVA.co.za</h1>
   <div class="info-box">📌 100,000 individual job pages + XML sitemaps for all search engines</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem">
     <div class="job-card">
@@ -455,8 +460,8 @@ app.get('/sitemap', (req, res) => {
 </div>`;
 
   res.send(renderHTML({
-    title: 'Sitemap | SAJobs.co.za',
-    meta: 'Complete sitemap of SAJobs.co.za with 100,000 job listings across South Africa.',
+    title: 'Sitemap | SANOVA.co.za',
+    meta: 'Complete sitemap of SANOVA.co.za with 100,000 job listings across South Africa.',
     bodyContent: body,
     schema: null
   }));
@@ -466,7 +471,7 @@ app.get('/sitemap', (req, res) => {
 app.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(`User-agent: *
 Allow: /
-Sitemap: https://sajobs.co.za/sitemap.xml
+Sitemap: ${BASE_URL}/sitemap.xml
 Disallow: /api/`);
 });
 
@@ -490,7 +495,7 @@ app.get('/api/jobs', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🇿🇦 SAJobs.co.za running on port ${PORT}`);
+  console.log(`🇿🇦 SANOVA.co.za running on port ${PORT}`);
   console.log(`📋 ${TOTAL_JOBS.toLocaleString()} job pages ready`);
   console.log(`🏢 ${companies.length} companies hiring in South Africa`);
   console.log(`📍 ${southAfricaLocations.length} locations across SA`);
