@@ -8,6 +8,38 @@ const PORT = process.env.PORT || 3000;
 app.use(compression());
 app.use(express.static('public'));
 
+// ─── AD CONFIGURATION ──────────────────────────────────────────────────────────
+const AD_SCRIPT = `
+<script>
+  atOptions = {
+    'key' : '211059ac9530a246efef275823da8000',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highperformanceformat.com/211059ac9530a246efef275823da8000/invoke.js"></script>
+`;
+
+const AD_TOP = `
+<div style="text-align:center; width:100%; padding:10px 0; background:#fff; border-bottom:1px solid #eee;">
+  ${AD_SCRIPT}
+</div>
+`;
+
+const AD_MIDDLE = `
+<div style="text-align:center; width:100%; padding:10px 0; background:#fff; margin:20px 0; border:1px solid #eee; border-radius:8px;">
+  ${AD_SCRIPT}
+</div>
+`;
+
+const AD_BOTTOM = `
+<div style="text-align:center; width:100%; padding:10px 0; background:#fff; border-top:1px solid #eee; margin-top:20px;">
+  ${AD_SCRIPT}
+</div>
+`;
+
 // ─── DYNAMIC DOMAIN CONFIGURATION ──────────────────────────────────────────────
 // Get the base URL from environment or use the actual domain
 const BASE_URL = process.env.BASE_URL || 'https://wordly-ramp-production.up.railway.app';
@@ -119,6 +151,7 @@ footer a{color:#f7b731}
 </style>
 </head>
 <body>
+${AD_TOP}
 <nav>
   <a class="brand" href="/"><span>SA</span>NOVA<span>.co.za</span></a>
   <div class="nav-links">
@@ -129,6 +162,7 @@ footer a{color:#f7b731}
   </div>
 </nav>
 ${bodyContent}
+${AD_BOTTOM}
 <footer>
   &copy; 2025 SANOVA.co.za — <strong>100,000 Jobs</strong> across South Africa |
   <a href="/jobs">Browse All</a> · <a href="/jobs?type=remote">Remote Jobs</a> · <a href="/sitemap">Sitemap</a>
@@ -210,6 +244,7 @@ app.get('/', (req, res) => {
   </div>
 </div>
 <div class="container">
+  ${AD_MIDDLE}
   <div class="info-box">
     🇿🇦 South Africa's most comprehensive job board — browse <strong>50,000 remote jobs</strong> and <strong>50,000 on-site jobs</strong> across all industries.
   </div>
@@ -301,6 +336,7 @@ app.get('/jobs', (req, res) => {
   <a href="/jobs?type=onsite"><span class="filter-chip ${typeFilter==='onsite'?'active':''}">🏢 On-site (50,000)</span></a>
 </div>
 <div class="container">
+  ${AD_MIDDLE}
   <div class="page-grid">${cards}</div>
   <div class="pagination">${pages.join('')}</div>
 </div>`;
@@ -351,6 +387,7 @@ app.get('/jobs/:id', (req, res) => {
   <div class="breadcrumb">
     <a href="/">Home</a> › <a href="/jobs">Jobs</a> › <a href="/jobs?type=${job.isRemote ? 'remote' : 'onsite'}">${job.isRemote ? 'Remote' : 'On-site'}</a> › ${job.title}
   </div>
+  ${AD_MIDDLE}
   <div class="job-detail">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
       <div>
@@ -429,6 +466,7 @@ app.get('/sitemap', (req, res) => {
 <div class="container">
   <h1 style="margin-bottom:1rem">Sitemap — SANOVA.co.za</h1>
   <div class="info-box">📌 100,000 individual job pages + XML sitemaps for all search engines</div>
+  ${AD_MIDDLE}
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem">
     <div class="job-card">
       <div class="card-title">Main Pages</div>
